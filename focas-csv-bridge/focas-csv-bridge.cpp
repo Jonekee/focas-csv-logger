@@ -8,25 +8,43 @@
 
 int main(int argc, char *argv[])
 {
+	// ********** Parse Command Line Arguments ************
+	char* listFilename;
+	char* ipAddress = "192.168.1.1";
+	unsigned short port = 8193;
+
+	if (argc < 3) 
+	{
+		printf("Usage is [application] -f <listOfData> -i <ipAddress> -p <port>\n");
+		return 0;
+	}
+	else
+	{
+		for (int i = 1; i < argc; i++) {
+			if (i + 1 != argc)
+			{
+				if (strcmp(argv[i], "-f") == 0) { listFilename = argv[i + 1]; }
+				else if (strcmp(argv[i], "-i") == 0) { ipAddress = argv[i + 1]; }
+				else if (strcmp(argv[i], "-p") == 0) { port = atoi(argv[i + 1]); }
+			}
+		}
+	}
+
+
+	// ************* Connection *****************
 	int result = -1;
 	unsigned short fwlibHndl;
 	bool mConnected = false;
+
+	result = cnc_allclibhndl3(ipAddress, port, 10, &fwlibHndl);
+	if (result == 0) { mConnected = true; }
+
+
+	// ******* Number of Axis and Spindle *******
 	short mQtyAxis = 0;
 	short mQtySpindle = 0;
 	short mQtyPath = 0;
 
-	printf("FANUC Logger v0.1\n");
-	printf("=======================\n");
-
-	// ************* Connection *****************
-	printf("\nConnection\n");
-	printf("-----------------------\n");
-	result = cnc_allclibhndl3("192.168.82.16", 8193, 10, &fwlibHndl);
-	if (result == 0) { mConnected = true; }
-	printf("Result of cnc_allclibhndl3 is: %d\n", result);
-
-
-	// ******* Number of Axis and Spindle *******
 	if (mConnected){
 		ODBSYSEX sysinfo;
 		result = cnc_sysinfo_ex(fwlibHndl, &sysinfo);
@@ -36,7 +54,6 @@ int main(int argc, char *argv[])
 			mQtySpindle = sysinfo.ctrl_spdl;
 			mQtyPath = sysinfo.ctrl_path;
 		}
-		printf("The number of axis is %d\n", mQtyAxis);
 	}
 
 	// *************** Retrieve Data ***********
@@ -45,11 +62,8 @@ int main(int argc, char *argv[])
 
 
 	// ************* Disconnection *****************
-	printf("\nDisconnection\n");
-	printf("-----------------------\n");
 	result = cnc_freelibhndl(fwlibHndl);
 	if (result == 0) { mConnected = true; }
-	printf("Result of cnc_freelibhndl is: %d\n", result);
 
 	return 0;
 }
