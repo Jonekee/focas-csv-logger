@@ -5,11 +5,12 @@
 #include "30i\fwlib32.h"
 #include "focas-csv-bridge.h"
 #include "math.h"
+#include "minIni.h"
 
 int main(int argc, char *argv[])
 {
 	// ********** Parse Command Line Arguments ************
-	char* listFilename;
+	char* listFilename = "";
 	char* ipAddress = "192.168.1.1";
 	unsigned short port = 8193;
 
@@ -29,6 +30,13 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+
+	// Load Parameters and Diagnostics from ini File
+	char key[20];
+	for (int k = 0; ini_getkey("parameters", k, key, 20, listFilename) > 0; k++)
+		printf("%s\n", key);
+	for (int k = 0; ini_getkey("diagnostics", k, key, 20, listFilename) > 0; k++)
+		printf("%s\n", key);
 
 
 	// ************* Connection *****************

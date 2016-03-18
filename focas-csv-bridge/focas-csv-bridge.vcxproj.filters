@@ -27,12 +27,21 @@
     <ClInclude Include="focas-csv-bridge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="minGlue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="minIni.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="focas-csv-bridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="minIni.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
